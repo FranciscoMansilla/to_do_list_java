@@ -5,6 +5,7 @@
 package todolist;
 
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,13 +14,14 @@ import java.util.ArrayList;
 public class CreateTaskView extends javax.swing.JFrame {
 
     private ArrayList<Task> taskList = new ArrayList<Task>();
-
+    private DefaultTableModel model;
     /**
      * Creates new form CreateTaskView
      */
     public CreateTaskView() {
         initComponents();
         setVisible(true);
+        model = (DefaultTableModel) toDoTable.getModel();
     }
 
     /**
@@ -69,10 +71,7 @@ public class CreateTaskView extends javax.swing.JFrame {
 
         toDoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Title", "Description", "Status"
@@ -154,19 +153,24 @@ public class CreateTaskView extends javax.swing.JFrame {
         String title = titleInput.getText();
         String description = descriptionInput.getText();
         if (!title.equals("") && !description.equals("")) {
-            System.out.println(title + " " + description);
+            //System.out.println(title + " " + description);
             Task task = new Task(title, description);
             boolean res = taskList.add(task);
             if (res) {
+                Object[] row = new Object[3];
+                row[0] = task.getTitle();
+                row[1] = task.getDescription();
+                row[2] = task.getStatus();
+                model.addRow(row);
                 titleInput.setText("");
                 descriptionInput.setText("");
-                for (Task object : taskList) {
-                    Object[] row = {object.getTitle(), object.getDescription()};
-                    // Agrega más valores de columnas según tus necesidades
-                    toDoTable.addRowSelectionInterval(0, 0);
-                    toDoTable.addRowSelectionInterval(0, 1);
-                    toDoTable.addRowSelectionInterval(0, 2);
-                }
+                //for (Task taskObject : taskList) {
+                //    Object[] row = new Object[3];
+                //    row[0] = taskObject.getTitle();
+                //    row[1] = taskObject.getDescription();
+                //    row[2] = taskObject.getStatus();
+                //    model.addRow(row);
+                //}
             } else {
                 System.out.println("An error has occurred. Please try again.");
             }
